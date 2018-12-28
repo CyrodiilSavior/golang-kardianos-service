@@ -79,9 +79,9 @@ const (
 	optionSessionCreate        = "SessionCreate"
 	optionSessionCreateDefault = false
 
-	optionRunWait      = "RunWait"
-	optionReloadSignal = "ReloadSignal"
-	optionPIDFile      = "PIDFile"
+	optionRunWait         = "RunWait"
+	optionReloadSignal    = "ReloadSignal"
+	optionPIDFile         = "PIDFile"
 )
 
 // Config provides the setup for a Service. The Name field is required.
@@ -92,6 +92,7 @@ type Config struct {
 	UserName    string   // Run as username.
 	Arguments   []string // Run with arguments.
 
+	EnvironmentFile string
 	// Optional field to specify the executable for service.
 	// If empty the current executable is used.
 	Executable string

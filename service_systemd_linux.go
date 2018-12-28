@@ -52,6 +52,7 @@ func (s *systemd) configPath() (cp string, err error) {
 	cp = "/etc/systemd/system/" + s.Config.Name + ".service"
 	return
 }
+
 func (s *systemd) template() *template.Template {
 	return template.Must(template.New("").Funcs(tf).Parse(systemdScript))
 }
@@ -82,11 +83,13 @@ func (s *systemd) Install() error {
 		Path string
 		ReloadSignal string
 		PIDFile string
+    		EnvironmentFile string
 	}{
 		s.Config,
 		path,
 		s.Option.string(optionReloadSignal, ""),
 		s.Option.string(optionPIDFile, ""),
+	        s.Config.EnvironmentFile,
 	}
 
 	err = s.template().Execute(f, to)
@@ -169,6 +172,7 @@ ExecStart={{.Path}}{{range .Arguments}} {{.|cmd}}{{end}}
 {{if .UserName}}User={{.UserName}}{{end}}
 {{if .ReloadSignal}}ExecReload=/bin/kill -{{.ReloadSignal}} "$MAINPID"{{end}}
 {{if .PIDFile}}PIDFile={{.PIDFile|cmd}}{{end}}
+EnvironmentFile={{.EnvironmentFile}}
 Restart=always
 RestartSec=120
 
